@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2019",
+    "allowJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "inlineSources": true,
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "types": ["node", "jest"],
+    "stripInternal": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

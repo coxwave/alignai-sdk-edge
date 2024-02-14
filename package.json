@@ -1,0 +1,39 @@
+{
+  "name": "alignai-edge",
+  "version": "0.1.0",
+  "description": "Server-side Align AI SDK for Edge Runtime (e.g. Vercel Edge Runtime)",
+  "keywords": [
+    "align-ai",
+    "conversation",
+    "analytics",
+    "sdk",
+    "ai-native",
+    "ingestion"
+  ],
+  "author": "Coxwave <tech@coxwave.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "build": "rm -rf ./dist && tsc"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
