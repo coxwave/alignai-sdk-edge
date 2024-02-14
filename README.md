@@ -1,6 +1,6 @@
 # Align AI Edge Runtime (V8 Engine) SDK
 
-[![npm version](https://badge.fury.io/js/alignai-edge.svg)](https://badge.fury.io/js/alignai)
+[![npm version](https://badge.fury.io/js/alignai-edge.svg)](https://badge.fury.io/js/alignai-edge)
 ![Supported Node Version](https://img.shields.io/node/v/alignai-edge)
 ![License](https://img.shields.io/github/license/coxwave/alignai-sdk-edge)
 
