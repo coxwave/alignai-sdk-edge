@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import {defaultAssistantId} from "./consts";
-import {rfc3339Now} from "./utils";
+import {CustomProperties, rfc3339Now, serializeCustomProperties} from "./utils";
 
 export interface Event {
     toCompatPayload(): CompatPayload;
@@ -15,6 +15,7 @@ export interface OpenSessionEventProps {
     userId: string;
     assistantId?: string;
     sessionTitle?: string;
+    customProperties?: CustomProperties;
 }
 
 export class OpenSessionEvent implements Event {
@@ -31,7 +32,8 @@ export class OpenSessionEvent implements Event {
                     sessionStartTime: rfc3339Now(),
                     userId: props.userId,
                     assistantId: props.assistantId ?? defaultAssistantId,
-                }
+                },
+                customProperties: props.customProperties ? serializeCustomProperties(props.customProperties) : undefined,
             }
         };
     }
@@ -46,6 +48,7 @@ export interface CreateMessageEventProps {
     messageIndex: number;
     messageRole: 'user' | 'assistant';
     messageContent: string;
+    customProperties?: CustomProperties;
 }
 
 export class CreateMessageEvent implements Event {
@@ -62,6 +65,7 @@ export class CreateMessageEvent implements Event {
                     messageRole: props.messageRole === 'user' ? 'ROLE_USER' : 'ROLE_ASSISTANT',
                     messageContent: props.messageContent,
                 },
+                customProperties: props.customProperties ? serializeCustomProperties(props.customProperties) : undefined,
             }
         };
     }
