@@ -6,7 +6,7 @@ export interface Event {
     toCompatPayload(): CompatPayload;
 }
 
-interface CompatPayload {
+export interface CompatPayload {
     [key: string]: string | number | boolean | null | undefined | CompatPayload;
 }
 
@@ -106,6 +106,7 @@ export interface IdentifyUserEventProps {
     userIp?: string;
     userCountryCode?: string;
     userCreateTime?: Date;
+    customProperties?: CustomProperties;
 }
 
 export class IdentifyUserEvent implements Event {
@@ -126,6 +127,7 @@ export class IdentifyUserEvent implements Event {
                     } : undefined,
                     userCreateTime: props.userCreateTime ? props.userCreateTime.toISOString() : rfc3339Now(),
                 },
+                customProperties: props.customProperties ? serializeCustomProperties(props.customProperties) : undefined,
             }
         };
     }

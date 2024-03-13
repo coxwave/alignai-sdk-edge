@@ -1,8 +1,10 @@
+import {CompatPayload} from "./events";
+
 export function rfc3339Now(): string {
     return new Date().toISOString();
 }
 
-interface CustomPropertyValue {
+interface CustomPropertyValue extends CompatPayload {
     stringValue: string
 }
 
