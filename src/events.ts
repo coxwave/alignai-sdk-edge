@@ -1,14 +1,17 @@
 import {v4 as uuidv4} from 'uuid';
 import {defaultAssistantId} from "./consts";
-import {CustomProperties, rfc3339Now, serializeCustomProperties} from "./utils";
+import {rfc3339Now, serializeCustomProperties} from "./utils";
 
 export interface Event {
     toCompatPayload(): CompatPayload;
 }
 
-export interface CompatPayload {
+interface CompatPayload {
     [key: string]: string | number | boolean | null | undefined | CompatPayload;
 }
+
+export type CustomPropertyValue = string;
+export type CustomProperties = Record<string, CustomPropertyValue>;
 
 export interface OpenSessionEventProps {
     sessionId: string;

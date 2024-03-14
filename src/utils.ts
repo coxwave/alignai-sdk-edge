@@ -1,14 +1,16 @@
-import {CompatPayload} from "./events";
+import {CustomProperties, CustomPropertyValue} from "./events";
 
 export function rfc3339Now(): string {
     return new Date().toISOString();
 }
 
-interface CustomPropertyValue extends CompatPayload {
+/**
+ * NOTE(@hyeonji.shin): `CustomPropertyMessage` needs to inherit from `Record<string, string>` to be recognized as a `CompatPayload`.
+ * @see https://stackoverflow.com/questions/37006008/typescript-index-signature-is-missing-in-type
+ */
+interface CustomPropertyMessage extends Record<string, CustomPropertyValue> {
     stringValue: string
 }
-
-export type CustomProperties = Record<string, string>;
 
 export function serializeCustomProperties(props: CustomProperties) {
     return Object.entries(props).reduce((acc, [key, value]) => {
@@ -17,5 +19,5 @@ export function serializeCustomProperties(props: CustomProperties) {
         }
 
         return acc;
-    }, {} as Record<string, CustomPropertyValue>);
+    }, {} as Record<string, CustomPropertyMessage>);
 }
