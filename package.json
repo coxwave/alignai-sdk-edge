@@ -1,6 +1,6 @@
 {
   "name": "alignai-edge",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Server-side Align AI SDK for Edge Runtime (e.g. Vercel Edge Runtime)",
   "keywords": [
     "align-ai",

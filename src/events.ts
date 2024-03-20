@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import {defaultAssistantId} from "./consts";
-import {rfc3339Now} from "./utils";
+import {rfc3339Now, serializeCustomProperties} from "./utils";
 
 export interface Event {
     toCompatPayload(): CompatPayload;
@@ -10,11 +10,15 @@ interface CompatPayload {
     [key: string]: string | number | boolean | null | undefined | CompatPayload;
 }
 
+export type CustomPropertyValue = string;
+export type CustomProperties = Record<string, CustomPropertyValue>;
+
 export interface OpenSessionEventProps {
     sessionId: string;
     userId: string;
     assistantId?: string;
     sessionTitle?: string;
+    customProperties?: CustomProperties;
 }
 
 export class OpenSessionEvent implements Event {
@@ -31,7 +35,8 @@ export class OpenSessionEvent implements Event {
                     sessionStartTime: rfc3339Now(),
                     userId: props.userId,
                     assistantId: props.assistantId ?? defaultAssistantId,
-                }
+                },
+                customProperties: props.customProperties ? serializeCustomProperties(props.customProperties) : undefined,
             }
         };
     }
@@ -46,6 +51,7 @@ export interface CreateMessageEventProps {
     messageIndex: number;
     messageRole: 'user' | 'assistant';
     messageContent: string;
+    customProperties?: CustomProperties;
 }
 
 export class CreateMessageEvent implements Event {
@@ -62,6 +68,7 @@ export class CreateMessageEvent implements Event {
                     messageRole: props.messageRole === 'user' ? 'ROLE_USER' : 'ROLE_ASSISTANT',
                     messageContent: props.messageContent,
                 },
+                customProperties: props.customProperties ? serializeCustomProperties(props.customProperties) : undefined,
             }
         };
     }
@@ -102,6 +109,7 @@ export interface IdentifyUserEventProps {
     userIp?: string;
     userCountryCode?: string;
     userCreateTime?: Date;
+    customProperties?: CustomProperties;
 }
 
 export class IdentifyUserEvent implements Event {
@@ -122,6 +130,7 @@ export class IdentifyUserEvent implements Event {
                     } : undefined,
                     userCreateTime: props.userCreateTime ? props.userCreateTime.toISOString() : rfc3339Now(),
                 },
+                customProperties: props.customProperties ? serializeCustomProperties(props.customProperties) : undefined,
             }
         };
     }
