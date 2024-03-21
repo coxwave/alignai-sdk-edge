@@ -1,6 +1,12 @@
 import {v4 as uuidv4} from 'uuid';
 import {defaultAssistantId} from "./consts";
 import {rfc3339Now, serializeCustomProperties} from "./utils";
+import {
+    validateCustomPropertiesOrThrow,
+    validateSessionIdOrThrow,
+    validateUserIdOrThrow,
+    ValidationError
+} from "./validate";
 
 export interface Event {
     toCompatPayload(): CompatPayload;
@@ -24,6 +30,15 @@ export interface OpenSessionEventProps {
 export class OpenSessionEvent implements Event {
     private readonly event: CompatPayload;
     constructor(props: OpenSessionEventProps) {
+        validateSessionIdOrThrow(props.sessionId);
+        validateUserIdOrThrow(props.userId);
+        if (props.assistantId && props.assistantId.length > 64) {
+            throw new ValidationError('assistantId must be at most 64 characters');
+        }
+        if (props.customProperties) {
+            validateCustomPropertiesOrThrow(props.customProperties);
+        }
+
         this.event = {
             id: uuidv4(),
             type: 'session_open',
@@ -57,6 +72,17 @@ export interface CreateMessageEventProps {
 export class CreateMessageEvent implements Event {
     private readonly event: CompatPayload;
     constructor(props: CreateMessageEventProps) {
+        validateSessionIdOrThrow(props.sessionId);
+        if (props.messageIndex <= 0) {
+            throw new ValidationError('messageIndex must be greater than 0');
+        }
+        if (props.messageContent === '') {
+            throw new ValidationError('messageContent is required');
+        }
+        if (props.customProperties) {
+            validateCustomPropertiesOrThrow(props.customProperties);
+        }
+
         this.event = {
             id: uuidv4(),
             type: 'message_create',
@@ -85,6 +111,8 @@ export interface CloseSessionEventProps {
 export class CloseSessionEvent implements Event {
     private readonly event: CompatPayload;
     constructor(props: CloseSessionEventProps) {
+        validateSessionIdOrThrow(props.sessionId);
+
         this.event = {
             id: uuidv4(),
             type: 'session_close',
@@ -115,6 +143,20 @@ export interface IdentifyUserEventProps {
 export class IdentifyUserEvent implements Event {
     private readonly event: CompatPayload;
     constructor(props: IdentifyUserEventProps) {
+        validateUserIdOrThrow(props.userId);
+        if (props.userDisplayName && props.userDisplayName.length > 64) {
+            throw new ValidationError('userDisplayName must be at most 64 characters');
+        }
+        if (props.userEmail && props.userEmail.length > 256) {
+            throw new ValidationError('userEmail must be at most 256 characters');
+        }
+        if (props.userCountryCode && props.userCountryCode.length !== 2) {
+            throw new ValidationError('userCountryCode must be ISO Alpha-2 code');
+        }
+        if (props.customProperties) {
+            validateCustomPropertiesOrThrow(props.customProperties);
+        }
+
         this.event = {
             id: uuidv4(),
             type: 'user_recognize',
